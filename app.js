@@ -2,7 +2,8 @@ const express = require("express");
 const userRouter = require("./routers/user");
 
 const app = express();
-app.use(userRouter);
+app.use(express.json())
+app.use('/api/user',userRouter);
 
 app.get("/about", (req, res) => {
     res.send("<h1>this is movie app from Pista Academy</h1>");
