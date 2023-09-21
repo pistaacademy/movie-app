@@ -94,3 +94,50 @@ exports.verifyEmail = async (req, res) => {
 
 
 }
+
+exports.resendEmailVerificationToken = async (req, res) => {
+  const {userId} = req.body;
+
+  const user = await User.findById(userId);
+  if(!user) return res.json({ error: "user not found!"});
+
+  if(user.isVerified) return res.json({ error: "This email address is already verified!"})
+
+  const alreadyHasToken = await EmailVerificationToken.findOne({owner: userId });
+  if(alreadyHasToken) return res.json({ error: 'Only after one hour you can request for another token!'})
+
+  
+  let OTP = ''
+  for (let i = 0; i <= 5; i++) {
+  const randomVal = Math.round(Math.random() * 9);
+  OTP += randomVal;
+  }
+
+  const newEmailVerificationToken = new EmailVerificationToken({
+  owner: user._id,
+  token: OTP
+  })
+
+  await newEmailVerificationToken.save();
+
+  var transport = nodemailer.createTransport({
+      host: "sandbox.smtp.mailtrap.io",
+      port: 2525,
+      auth: {
+        user: "44f04c357186f1",
+        pass: "9db9aa490a87d9"
+      }
+    });
+
+    transport.sendMail({
+      from : 'verification@reviewapp.com',
+      to: user.email,
+      subject: 'Email Verification',
+      html : `
+          <p>Your verification OTP</p>
+          <h1>${OTP}</h1>
+      `
+    })
+  
+  res.json({ message: 'New OTP Token send to your email' })
+}
