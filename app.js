@@ -1,9 +1,11 @@
 const express = require("express");
+const morgan = require("morgan");
 const userRouter = require("./routers/user");
 require('./db')
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
+app.use(morgan("dev"));
 app.use('/api/user',userRouter);
 
 app.post("/sign-in",
