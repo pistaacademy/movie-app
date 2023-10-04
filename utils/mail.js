@@ -14,7 +14,7 @@ exports.generateMailTransporter = () => nodemailer.createTransport({
     host: "sandbox.smtp.mailtrap.io",
     port: 2525,
     auth: {
-      user: "44f04c357186f1",
-      pass: "9db9aa490a87d9"
+      user: process.env.MAIL_TRAP_USER,
+      pass: process.env.MAIL_TRAP_PASS,
     }
   });

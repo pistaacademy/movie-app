@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect("mongodb+srv://pistaBlog:OQL6yaKwf2Y3ACGi@cluster0.4zy8s.mongodb.net/review_app")
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log("Database is connected!")
 })
