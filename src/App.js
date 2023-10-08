@@ -1,7 +1,9 @@
+import Navbar from "./components/user/Navbar";
+
 function App() {
   return (
     <div>
-     Pista Academy
+     <Navbar />
     </div>
   );
 }
