@@ -6,6 +6,7 @@ import EmailVerification from "./components/auth/EmailVerification";
 import ForgetPassword from "./components/auth/ForgetPassword";
 import ConfirmPassword from "./components/auth/ConfirmPassword";
 
+
 import { Route,Routes } from "react-router-dom";
 
 function App() {
