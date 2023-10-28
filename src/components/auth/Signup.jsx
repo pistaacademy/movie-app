@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Container from '../Container';
 import Title from '../form/Title';
 import FormInput from '../form/FormInput';
@@ -8,15 +8,55 @@ import { commonModalClasses } from '../../util/theme';
 import FormContainer from '../form/FormContainer';
 
 export default function Signup() {
+    const [userInfo, setUserInfo] = useState({
+        name: "",
+        email: "",
+        password: "",
+    })
+    const {name, email, password} = userInfo;
+
+    const handleChange = ({target}) => {
+        const {value, name} = target;
+        setUserInfo({...userInfo, [name]: value})
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(userInfo)
+    }
+
     return (
         <FormContainer>
             <Container>
-                <form className={commonModalClasses + ' w-72'}>
+                <form onSubmit={handleSubmit} className={commonModalClasses + ' w-72'}>
                     <Title children="Sign up" />
-                    <FormInput name="name" placeholder="Hamed Ahmadi" label="Name" type="text" autocomplete="off" />
-                    <FormInput name="email" placeholder="example@gmail.com" label="Email" type="text" autocomplete="off" />
-                    <FormInput name="password" placeholder="********" label="Password" type="password" />
+                    <FormInput 
+                        name="name" 
+                        placeholder="Hamed Ahmadi" 
+                        label="Name" type="text" 
+                        autoComplete="off"
+                        value={name} 
+                        onChange={handleChange}
+                    />
+                    <FormInput 
+                        name="email" 
+                        placeholder="example@gmail.com" 
+                        label="Email" type="text" 
+                        autoComplete="off"
+                        value={email} 
+                        onChange={handleChange}
+                    />
+                    <FormInput 
+                        name="password" 
+                        placeholder="********" 
+                        label="Password" 
+                        type="password" 
+                        value={password}
+                        onChange={handleChange}
+                    />
+                    
                     <Submit value="Sign up" />
+
                     <div className="flex justify-between">
                         <CustomeLink to="/auth/forget-password" children="Forget Password" />
                         <CustomeLink to="/auth/signin" children="Sign In" />
