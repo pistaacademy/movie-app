@@ -4,12 +4,14 @@ import Title from '../form/Title';
 import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
 import CustomeLink from '../CustomeLink';
+import { commonModalClasses } from '../../util/theme';
+import FormContainer from '../form/FormContainer';
 
 export default function Signup() {
     return (
-        <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
+        <FormContainer>
             <Container>
-                <form className='bg-secondary rounded p-6 w-72 space-y-6'>
+                <form className={commonModalClasses + ' w-72'}>
                     <Title children="Sign up" />
                     <FormInput name="name" placeholder="Hamed Ahmadi" label="Name" type="text" autocomplete="off" />
                     <FormInput name="email" placeholder="example@gmail.com" label="Email" type="text" autocomplete="off" />
@@ -21,6 +23,6 @@ export default function Signup() {
                     </div>
                 </form>
             </Container>
-        </div>
+        </FormContainer>
     )
 }
