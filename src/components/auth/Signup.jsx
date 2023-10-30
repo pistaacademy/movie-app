@@ -7,6 +7,8 @@ import CustomeLink from '../CustomeLink';
 import { commonModalClasses } from '../../util/theme';
 import FormContainer from '../form/FormContainer';
 
+import { createUser } from '../../api/auth';
+
 const validateUserInfo = ({name, email, password}) => {
    
     const isValidEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -37,13 +39,15 @@ export default function Signup() {
         setUserInfo({...userInfo, [name]: value})
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const {ok, error} = validateUserInfo(userInfo);
 
         if(!ok) return console.log(error);
 
-        if(ok) return console.log(userInfo)
+        const response = await createUser(userInfo);
+        if(response.error) return console.log(response.error)
+        console.log(response.user)
     }
 
     return (
