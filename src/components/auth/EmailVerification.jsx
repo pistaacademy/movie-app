@@ -8,6 +8,7 @@ import CustomeLink from '../CustomeLink';
 import { commonModalClasses } from '../../util/theme';
 import FormContainer from '../form/FormContainer';
 import { verifyUserEmail } from '../../api/auth';
+import { useNotification } from '../../hooks';
 
 const OTP_LENGTH = 6;
 
@@ -27,6 +28,7 @@ export default function EmailVerification() {
 
     const navigate = useNavigate();
     const inputRef = useRef();
+    const {updateNotification} = useNotification()
     const {state} = useLocation();
     const user = state?.user;
 
@@ -65,9 +67,9 @@ export default function EmailVerification() {
 
         const {error, message} = await verifyUserEmail({OTP: otp.join(''), userId: user.id})
 
-        if(error) return console.log(error);
+        if(error) return updateNotification('error', error);
 
-        console.log(message);
+        updateNotification('success', message);
     }
 
     useEffect(() => {

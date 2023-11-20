@@ -9,6 +9,7 @@ import { commonModalClasses } from '../../util/theme';
 import FormContainer from '../form/FormContainer';
 
 import { createUser } from '../../api/auth';
+import { useNotification } from '../../hooks';
 
 const validateUserInfo = ({name, email, password}) => {
    
@@ -36,6 +37,7 @@ export default function Signup() {
     const {name, email, password} = userInfo;
 
     const navigate = useNavigate();
+    const {updateNotification} = useNotification()
 
     const handleChange = ({target}) => {
         const {value, name} = target;
@@ -46,7 +48,7 @@ export default function Signup() {
         e.preventDefault();
         const {ok, error} = validateUserInfo(userInfo);
 
-        if(!ok) return console.log(error);
+        if(!ok) return updateNotification('error', error);
 
         const response = await createUser(userInfo);
         if(response.error) return console.log(response.error)
