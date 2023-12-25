@@ -27,6 +27,12 @@ export default function AuthProvider({ children }) {
     
     }
 
+    const isAuth = () => {
+        const token = localStorage.getItem('auth-token')
+        if (!token) return;
+    
+    }
+
     return (
         <AuthContext.Provider value={{ authInfo, handleLogin }}>
             {children}
