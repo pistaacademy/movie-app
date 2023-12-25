@@ -29,6 +29,7 @@ export default function Signin() {
 
     const {updateNotification} = useNotification();
     const {handleLogin, authInfo} = useAuth();
+    const { isPending } = authInfo;
     console.log(authInfo);
 
     const handleChange = ({target}) => {
@@ -68,7 +69,7 @@ export default function Signin() {
                         value={userInfo.password}
                         onChange={handleChange} 
                     />
-                    <Submit value="Sign in" />
+                    <Submit value="Sign in" busy={isPending} />
                     <div className="flex justify-between">
                         <CustomeLink to="/auth/forget-password" children="Forget Password" />
                         <CustomeLink to="/auth/signup" children="Sign Up" />
