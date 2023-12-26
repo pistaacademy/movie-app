@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '../Container';
 import Title from '../form/Title';
 import FormInput from '../form/FormInput';
@@ -7,6 +7,7 @@ import CustomeLink from '../CustomeLink';
 import { commonModalClasses } from '../../util/theme';
 import FormContainer from '../form/FormContainer';
 import { useAuth, useNotification } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
 
 const validateUserInfo = ({email, password}) => {
    
@@ -27,11 +28,11 @@ export default function Signin() {
         password: "",
     })
 
+    const navigate = useNavigate()
     const {updateNotification} = useNotification();
     const {handleLogin, authInfo} = useAuth();
-    const { isPending } = authInfo;
+    const { isPending, isLoggedIn } = authInfo;
     
-    console.log(authInfo);
 
     const handleChange = ({target}) => {
         const {value, name} = target;
@@ -44,10 +45,12 @@ export default function Signin() {
 
         if(!ok) return updateNotification('error', error);
 
-        console.log('login success');
-
         handleLogin(userInfo.email, userInfo.password)
     }
+
+    useEffect(() => {
+        if(isLoggedIn) navigate('/')
+    },[isLoggedIn]);
 
     return (
         <FormContainer>
