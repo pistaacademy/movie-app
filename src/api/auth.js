@@ -70,3 +70,17 @@ export const forgetPassword = async (email) => {
     }
 }
 
+
+export const verifyPasswordResetToken = async (token, userId) => {
+    try {
+        const { data } = await client.post('/user/verify-pass-reset-token', {token, userId});
+        return data;
+    }
+    catch (error) {
+        const {response} = error;
+        if(response?.data) return response.data;
+
+        return {error: error.message || error}
+    }
+}
+
