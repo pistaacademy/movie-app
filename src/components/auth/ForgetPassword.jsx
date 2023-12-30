@@ -41,7 +41,7 @@ export default function ForgetPassword() {
                         placeholder="example@gmail.com" 
                         label="Email" 
                         type="text" 
-                        autocomplete="off" 
+                        autoComplete="off" 
                     />
                     <Submit value="Send Link" />
 
