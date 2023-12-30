@@ -142,9 +142,9 @@ exports.forgetPassword = async (req, res) => {
 
   const newPasswordResetToken =  await PasswordResetToken({owner: user._id, token});
 
-  newPasswordResetToken.save();
+  await newPasswordResetToken.save();
 
-  const resetPasswordurl = `http://localhost:8000/reset-password?token=${token}&id=${user._id}`;
+  const resetPasswordurl = `http://localhost:8000/auth/reset-password?token=${token}&id=${user._id}`;
 
   const transport = generateMailTransporter();
 
