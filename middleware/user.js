@@ -18,7 +18,7 @@ exports.isValidPassResetToken = async (req, res, next) => {
 
     if(!matched) return sendError(res, 'Unautorized access, invalid request!');
 
-    res.resetToken = resetToken;
+    req.resetToken = resetToken;
 
     next();
 }

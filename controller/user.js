@@ -177,7 +177,7 @@ exports.resetPassword = async (req, res) => {
 
   await user.save();
 
-  await PasswordResetToken.findByIdAndDelete(res.resetToken._id)
+  await PasswordResetToken.findByIdAndDelete(req.resetToken._id);
 
   const transport = generateMailTransporter();
 
@@ -194,7 +194,7 @@ exports.resetPassword = async (req, res) => {
 
 }
 
-exports.signIn = async (req,res, next) => {
+exports.signIn = async (req,res) => {
   const {email, password} = req.body;
 
   const user = await User.findOne({email})
