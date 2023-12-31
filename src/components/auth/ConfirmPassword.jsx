@@ -13,6 +13,11 @@ import {verifyPasswordResetToken} from '../../api/auth';
 
 export default function ConfirmPassword() {
 
+    const [password, setPassword] = useState({
+        one: '',
+        two: ''
+    })
+
     const [isVerifying, setIsVerrifying] = useState(false);
     const [isValid, setIsValid] = useState(false);
 
@@ -44,6 +49,21 @@ export default function ConfirmPassword() {
         setIsValid(true)
     }
 
+    const handleChange = ({target}) => {
+        const {name, value} = target;
+        setPassword({...password, [name]: value})
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(!password.one.trim())
+            return updateNotification("error","Password is missing!");
+        if(password.one.trim().length < 8)
+            return updateNotification("error","Password must be 8 characters long!");
+        if (password.one !== password.two)
+            return updateNotification("error", "Password do not match!")
+    }
+
     if(isVerifying)
         return (
             <FormContainer>
@@ -73,17 +93,21 @@ export default function ConfirmPassword() {
     return (
         <FormContainer>
             <Container>
-            <form className={commonModalClasses + ' w-96'}>
+            <form onSubmit={handleSubmit} className={commonModalClasses + ' w-96'}>
                     <Title>Enter New Password</Title>
-                    <FormInput 
-                        name="password" 
+                    <FormInput
+                        value={password.one}
+                        onChange={handleChange} 
+                        name="one" 
                         placeholder="********" 
                         label="New Password" 
                         type="password" 
                         autoComplete="off" 
                     />
-                    <FormInput 
-                        name="confirmPassword" 
+                    <FormInput
+                        value={password.two}
+                        onChange={handleChange}  
+                        name="two" 
                         placeholder="********" 
                         label="Confirm Password" 
                         type="password" 
