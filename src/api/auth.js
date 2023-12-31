@@ -84,3 +84,16 @@ export const verifyPasswordResetToken = async (token, userId) => {
     }
 }
 
+export const resetPassword = async (passwordInfo) => {
+    try {
+        const { data } = await client.post('/user/reset-password', passwordInfo);
+        return data;
+    }
+    catch (error) {
+        const {response} = error;
+        if(response?.data) return response.data;
+
+        return {error: error.message || error}
+    }
+}
+
