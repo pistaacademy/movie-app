@@ -7,7 +7,7 @@ import Submit from '../form/Submit';
 import CustomeLink from '../CustomeLink';
 import { commonModalClasses } from '../../util/theme';
 import FormContainer from '../form/FormContainer';
-import { verifyUserEmail } from '../../api/auth';
+import { resendEmailVerificationToken, verifyUserEmail } from '../../api/auth';
 import { useAuth, useNotification } from '../../hooks';
 
 const OTP_LENGTH = 6;
@@ -27,7 +27,9 @@ export default function EmailVerification() {
     const [activeOtpIndex, setActiveOtpIndex] = useState(0)
 
     const {isAuth, authInfo} = useAuth();
-    const {isLoggedIn} = authInfo;
+    const {isLoggedIn, profile} = authInfo;
+    const isVerified = profile?.isVerified;
+
     const navigate = useNavigate();
     const inputRef = useRef();
     const {updateNotification} = useNotification()
@@ -43,6 +45,14 @@ export default function EmailVerification() {
         const diff = index - 1;
         nextIndex = diff !== 0 ? diff : 0
         setActiveOtpIndex(nextIndex)
+    }
+
+    const handleOTPResend = async () => {
+        const {error, message} = await resendEmailVerificationToken(user.id);
+
+        if (error) return updateNotification("error", error)
+
+        updateNotification("success", message)
     }
 
     const handleOtpChange = ({target}, index) => {
@@ -84,8 +94,8 @@ export default function EmailVerification() {
 
     useEffect(() =>{
         if(!user) navigate('/not-found')
-        if(isLoggedIn) navigate('/')
-    },[user, isLoggedIn])
+        if(isLoggedIn && isVerified) navigate('/')
+    },[user, isLoggedIn,isVerified])
 
     return (
         <FormContainer>
@@ -114,7 +124,15 @@ export default function EmailVerification() {
                     </div>
 
 
-                    <Submit value="Verify Account" />
+                    <div>
+                        <Submit value="Verify Account" />
+                        <button
+                            onClick={handleOTPResend}
+                            type='button' 
+                            className="dark:text-white text-blue-500 font-semibold hover:underline mt-2">
+                                I don't have OTP
+                        </button>
+                    </div>
                 </form>
             </Container>
         </FormContainer>
