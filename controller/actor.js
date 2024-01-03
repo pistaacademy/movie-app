@@ -16,7 +16,10 @@ exports.createActor = async (req, res) => {
 
     const newActor = new Actor({name, about, gender})
     if(file) {
-      const {secure_url, public_id} = await cloudinary.uploader.upload(file.path)
+      const {secure_url, public_id} = await cloudinary.uploader.upload(
+        file.path, 
+        {gravity: "face", height: 500, width: 500, crop: "thumb"}
+      )
       newActor.avatar = {url: secure_url, public_id};
     }
     await newActor.save()
@@ -49,7 +52,10 @@ exports.updateActor = async (req, res) => {
   }
 
   if(file) {
-    const { secure_url, public_id } = await cloudinary.uploader.upload(file.path);
+    const { secure_url, public_id } = await cloudinary.uploader.upload(
+      file.path,
+      {gravity: "face", height: 500, width: 500, crop: "thumb"}
+      );
     actor.avatar = { url: secure_url, public_id}
   }
 
@@ -66,5 +72,28 @@ exports.updateActor = async (req, res) => {
     gender,
     avatar: actor.avatar?.url
   })
+
+}
+
+exports.removeActor = async (req, res) => {
+  const {actorId} = req.params;
+
+  if(!isValidObjectId(actorId)) return sendError(res, 'Invalid Request!');
+
+  const actor = await Actor.findById(actorId)
+  if(!actor) return sendError(res, 'Invalid request, record not found!')
+
+  const public_id = actor.avatar?.public_id;
+
+  if(public_id) {
+    const {result} = await cloudinary.uploader.destroy(public_id)
+    if(result !== "ok") {
+      return sendError(res, "Could not remove image from cloud!")
+    }
+  }
+
+  await Actor.findByIdAndDelete(actorId);
+
+  res.json({message: 'Record removed successfully.'})
 
 }
