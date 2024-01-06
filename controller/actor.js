@@ -103,3 +103,19 @@ exports.searchActor = async (req, res) => {
   const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
   res.json(result);
 }
+
+exports.getLatestActors = async (req, res) => {
+  const result = await Actor.find().sort({createdAt: '-1'}).limit(10)
+  res.json(result)
+}
+
+exports.getSearchActor = async (req, res) => {
+  const {id} = req.params;
+
+  if(!isValidObjectId(id)) return sendError(res, 'Invalid Request!');
+
+  const actor = await Actor.findById(id);
+  if (!actor) return sendError(res, "Invalid request, actor not found!", 404);
+
+  res.json(actor)
+}
