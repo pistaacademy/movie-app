@@ -1,14 +1,18 @@
 const express = require("express");
-const { createActor, updateActor,removeActor,searchActor,getLatestActors, getSearchActor } = require("../controller/actor");
+const { 
+    createActor, updateActor,removeActor,searchActor,getLatestActors, getSearchActor
+ } = require("../controller/actor");
+
 const { uploadImage } = require("../middleware/multer");
 const { actorInfoValidator, validate } = require("../middleware/validator");
+const { isAuth, isAdmin } = require("../middleware/auth");
 
 const router = express.Router();
 
-router.post('/create',uploadImage.single('avatar'),actorInfoValidator,validate , createActor)
-router.post('/update/:actorId',uploadImage.single('avatar'),actorInfoValidator,validate , updateActor)
-router.delete('/:actorId', removeActor)
-router.get('/search', searchActor)
-router.get('/latest-uploads', getLatestActors)
+router.post('/create',isAuth,isAdmin,uploadImage.single('avatar'),actorInfoValidator,validate , createActor)
+router.post('/update/:actorId',isAuth,isAdmin,uploadImage.single('avatar'),actorInfoValidator,validate , updateActor)
+router.delete('/:actorId',isAuth,isAdmin, removeActor)
+router.get('/search',isAuth,isAdmin, searchActor)
+router.get('/latest-uploads',isAuth,isAdmin, getLatestActors)
 router.get('/single/:id', getSearchActor)
 module.exports = router;
