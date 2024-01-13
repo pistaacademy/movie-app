@@ -52,7 +52,7 @@ exports.validateMovie = [
         }
         return true;
     }),
-    check(trailerInfo).isObject().withMessage('trailerInfo must be an object with url and public_id').custom(({url, public_id}) => {
+    check('trailerInfo').isObject().withMessage('trailerInfo must be an object with url and public_id').custom(({url, public_id}) => {
         try {
             const result = new URL(url);
             if(!result.protocol.includes('http')) throw Error('Trailer url is invalid!')

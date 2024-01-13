@@ -27,4 +27,7 @@ exports.createMovie = async (req, res) => {
         trailer,
         language,
     } = body;
+
+    console.log(req.body)
+    res.send("OK");
 };
